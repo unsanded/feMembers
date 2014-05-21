@@ -8,6 +8,8 @@ MemberListWindow::MemberListWindow(DatabaseConnection& db, QWidget *parent) :
 {
     ui->setupUi(this);
     ui->memberListView->setModel(&model);
+    int idindex = model.fieldIndex("id");
+    ui->memberListView->hideColumn(idindex);
     verifySaveBox.setText("Save changes to database?");
     verifySaveBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
     //s
@@ -16,6 +18,7 @@ MemberListWindow::MemberListWindow(DatabaseConnection& db, QWidget *parent) :
 
     connect(ui->searchBox, SIGNAL(textEdited(QString)), this, SLOT(search(QString)));
 
+    connect(ui->exMembersCheckbox, SIGNAL(toggled(bool)), &model, SLOT(setExMembersVisible(bool)));
 
 
 }
@@ -48,5 +51,5 @@ void MemberListWindow::on_searchButton_pressed()
 
 void MemberListWindow::search(QString value)
 {
-        model.setFilter("firstName LIKE '%" + value + "%' OR lastName LIKE '%" + value + "%'");
+        model.setSearch(value);
 }

@@ -21,6 +21,13 @@
        <number>0</number>
       </property>
       <item>
+       <widget class="QCheckBox" name="exMembersCheckbox">
+        <property name="text">
+         <string>Show Ex-members</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLineEdit" name="searchBox">
         <property name="placeholderText">
          <string>Search Members</string>
@@ -112,6 +119,20 @@
      <height>27</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>file</string>
+    </property>
+    <widget class="QMenu" name="menuExport">
+     <property name="title">
+      <string>export</string>
+     </property>
+     <addaction name="actionCsv"/>
+     <addaction name="actionEmail"/>
+    </widget>
+    <addaction name="menuExport"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -122,6 +143,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionCsv">
+   <property name="text">
+    <string>csv</string>
+   </property>
+  </action>
+  <action name="actionEmail">
+   <property name="text">
+    <string>email</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

@@ -22,3 +22,6 @@ HEADERS  += memberlist.h \
     memberlistmodel.h
 
 FORMS    += memberlist.ui
+
+RESOURCES += \
+    nameTranslations.qrc
