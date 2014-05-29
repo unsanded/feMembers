@@ -15,13 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         memberlist.cpp \
     databaseconnection.cpp \
-    memberlistmodel.cpp
+    memberlistmodel.cpp \
+    qmemberlistview.cpp \
+    memberdelegate.cpp
 
 HEADERS  += memberlist.h \
     databaseconnection.h \
-    memberlistmodel.h
+    memberlistmodel.h \
+    qmemberlistview.h \
+    memberdelegate.h
 
 FORMS    += memberlist.ui
 
-RESOURCES += \
-    nameTranslations.qrc
+RESOURCES +=

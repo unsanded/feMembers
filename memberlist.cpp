@@ -12,7 +12,7 @@ MemberListWindow::MemberListWindow(DatabaseConnection& db, QWidget *parent) :
     ui->memberListView->hideColumn(idindex);
     verifySaveBox.setText("Save changes to database?");
     verifySaveBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-    //s
+
     QObject::connect(ui->saveButtoin, SIGNAL(pressed()),
            this, SLOT(save()) );
 
@@ -37,7 +37,7 @@ void MemberListWindow::save()
 {
         if(verifySaveBox.exec()==QMessageBox::Save){
                 if(!model.submitAll()){
-                        qDebug()<< "error saving changes:\n" << model.lastError().text();
+                        qDebug()<< "error saving changes:\n" << model.lastError().text() << "\n" << model.query().lastQuery();
                 }
         }
 }
@@ -52,4 +52,16 @@ void MemberListWindow::on_searchButton_pressed()
 void MemberListWindow::search(QString value)
 {
         model.setSearch(value);
+}
+
+void MemberListWindow::on_saveButtoin_clicked()
+{
+
+}
+
+void MemberListWindow::on_actionEmail_triggered()
+{
+
+    QClipboard* cb = QApplication::clipboard();
+    cb->setText("haha, im in your clipboard");
 }

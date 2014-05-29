@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QClipboard>
 #include "memberlistmodel.h"
 #include "databaseconnection.h"
 
@@ -27,6 +28,10 @@ private slots:
 
         void on_searchButton_pressed();
         void search(QString value);
+        void on_saveButtoin_clicked();
+
+        void on_actionEmail_triggered();
+
 private:
     Ui::MemberList *ui;
 };
