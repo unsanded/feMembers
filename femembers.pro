@@ -17,14 +17,17 @@ SOURCES += main.cpp\
     databaseconnection.cpp \
     memberlistmodel.cpp \
     qmemberlistview.cpp \
-    memberdelegate.cpp
+    memberdelegate.cpp \
+    exportcsvform.cpp
 
 HEADERS  += memberlist.h \
     databaseconnection.h \
     memberlistmodel.h \
     qmemberlistview.h \
-    memberdelegate.h
+    memberdelegate.h \
+    exportcsvform.h
 
-FORMS    += memberlist.ui
+FORMS    += memberlist.ui \
+    exportcsvform.ui
 
 RESOURCES +=

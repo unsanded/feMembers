@@ -36,14 +36,18 @@ public:
   QVariant data(const QModelIndex &idx, int role) const;
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+  QString exportCsv(const QStringList &list);
 
+  virtual bool updateRowInTable(int row, const QSqlRecord &values);
+ QVariant headerData(int section, Qt::Orientation orientation, int role) const;
   int getId(const QModelIndex &index) const;
 signals:
   
 public slots:
-  void setExMembersVisible(bool visible);
-  void setSearch(QString search);
+  void setExMembersVisible(bool visible); void setSearch(QString search);
   void onUpdate(int row, QSqlRecord& record);
+  void selectAll();
+  void clearSelection();
 };
 
 #endif // MEMBERLISTMODEL_H

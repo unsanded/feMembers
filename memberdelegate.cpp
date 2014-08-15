@@ -26,10 +26,16 @@ QWidget *MemberDelegate::createEditor(QWidget *parent, const QStyleOptionViewIte
             returnWidget->setProperty("MemberListType", QVariant(Date));
             return returnWidget;
           }
-         else if (dataType==Bool){
+        /*
+         else if (dataType==Bool)
+        {
+            int data=index.data().toInt();
             returnWidget = new QCheckBox();
+            ((QCheckBox*) returnWidget)->setCheckState(data?Qt::Checked:Qt::Unchecked);
             returnWidget->setProperty("MemberListType", QVariant(Bool));
+            return returnWidget;
           }
+          */
         return QItemDelegate::createEditor(parent, option, index);
 }
 
@@ -39,4 +45,6 @@ void MemberDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, co
             QDate date = ((QDateEdit*) editor)->date();
             model->setData(index, date.toString("yyyy-MM-dd"));
           }
+        else
+          QItemDelegate::setModelData(editor, model, index);
 }

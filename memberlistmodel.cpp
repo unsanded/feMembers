@@ -6,11 +6,12 @@ MemberlistModel::MemberlistModel( QSqlDatabase db, QObject *parent) :
 
         QSqlTableModel::setTable("members");
         qDebug() << "setTable() returned \n" << lastError().text();
-        setEditStrategy(QSqlTableModel::OnManualSubmit);
+        setEditStrategy(QSqlTableModel::OnFieldChange);
+        setExMembersVisible(false);
         if(select()){
                 qDebug() << "update data succesfull\n";
         }
-        insertColumn(0);
+//        insertColumn(0);
         setHeaderData(0, Qt::Horizontal, QString(" "));
 //*
         //translate some fieldnames
@@ -30,8 +31,20 @@ QVariant MemberlistModel::data(const QModelIndex &idx, int role) const
         if(role==Qt::BackgroundRole || role==Qt::BackgroundColorRole){
           return makeBackground(idx.row());
         }
+        if(idx.column()==0 && role==Qt::CheckStateRole){//checkbox column
+          int retval;
+          retval =getId(idx);
+          retval = checkedStatus[retval];
+          return retval;
+        }
+        else if (idx.column()==0 && role==Qt::DisplayRole){
+            return QVariant("");
+          }
         else if (role==Qt::ForegroundRole)
-          return makeForeground(idx.row());
+          if(idx.column()==0)
+            return QBrush();
+          else
+           return makeForeground(idx.row());
         else if (role==DataTypeRole){
           if(idx.column()==fieldIndex("bDate"))
             return Date;
@@ -44,38 +57,64 @@ QVariant MemberlistModel::data(const QModelIndex &idx, int role) const
           else return String;
         }
 
-        if(idx.column()==0){//checkbox column
-          int retval;
-          switch(role)
-          {
-          case Qt::CheckStateRole:
-          case Qt::DisplayRole:
-                  retval =getId(idx);
-                  retval = checkedStatus[retval];
-                  return retval;
-            case DataTypeRole:
-              return Bool;
-
-          default: return QVariant();
+        if(idx.column()==fieldIndex("currentlyMember") && role== Qt::CheckStateRole){
+            return (QSqlTableModel::data(idx).toInt()?Qt::Checked:Qt::Unchecked);
           }
-        }
-        else
-        {
-                return QSqlTableModel::data(idx, role);
-        }
+        return QSqlTableModel::data(idx, role);
 
 }
 
 bool MemberlistModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-        if(index.column()==0){
+        if(index.column()==0 && role==Qt::CheckStateRole){
                 int id=getId(index);
                 int v=value.toInt();
                 checkedStatus[id]=value.toInt();
                 emit dataChanged(index, index);
                 return true;
         }
+        if(index.column()==fieldIndex("currentlyMember") && role == Qt::CheckStateRole)
+          return QSqlTableModel::setData(index, value==Qt::Checked);
         return QSqlTableModel::setData(index, value, role);
+}
+
+QString MemberlistModel::exportCsv(const QStringList &list)
+{
+  QString result;
+  for(int i=0; i<rowCount(); i++){
+      QString line;
+      QString comma;
+      if(!data(createIndex(i, 0), Qt::DisplayRole).toInt()==0)
+        continue;
+
+      for(int j=0; j< list.count(); j++){
+          QString field=data(createIndex(i, fieldIndex(list[j])), Qt::DisplayRole).toString();
+          line.append(comma);
+          line.append(QString("\"%1\"").arg(field));
+          comma=",";
+        }
+      result.append(line);
+      result.append(";\n");
+    }
+  return result;
+}
+
+bool MemberlistModel::updateRowInTable(int row, const QSqlRecord &values)
+{
+  //int idColumn=fieldIndex("id");
+  bool ret = QSqlTableModel::updateRowInTable(row, values);
+
+  return ret;
+
+
+}
+
+QVariant MemberlistModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if(role==Qt::DisplayRole && orientation==Qt::Vertical){
+      return data(index(section, fieldIndex("firstName")), Qt::DisplayRole);
+    }
+  return QSqlTableModel::headerData(section, orientation, role);
 }
 
 int MemberlistModel::getId(const QModelIndex &index) const
@@ -86,18 +125,19 @@ int MemberlistModel::getId(const QModelIndex &index) const
 
 void MemberlistModel::setExMembersVisible(bool visible)
 {
-exMembersVisible=visible;
-setSearch(searchString);
+        exMembersVisible=visible;
+        setSearch(searchString);
 }
-
 
 Qt::ItemFlags MemberlistModel::flags(const QModelIndex &index) const
 {
+        QString columnName=headerData(index.column(), Qt::Horizontal, Qt::DisplayRole).toString();
         if(index.column()==0)
-                return QSqlTableModel::flags(index) | Qt::ItemIsUserCheckable;
+                return Qt::ItemIsUserCheckable | Qt::ItemIsEditable|Qt::ItemIsSelectable|Qt::ItemNeverHasChildren|Qt::ItemIsEnabled;
+        if(columnName=="currentlyMember")
+                return Qt::ItemIsUserCheckable | Qt::ItemIsEditable|Qt::ItemIsSelectable|Qt::ItemNeverHasChildren|Qt::ItemIsEnabled;
         return QSqlTableModel::flags(index);
 }
-
 
 void MemberlistModel::setSearch(QString value)
 {
@@ -111,6 +151,18 @@ void MemberlistModel::setSearch(QString value)
 
 void MemberlistModel::onUpdate(int row, QSqlRecord &record)
 {
+}
+
+void MemberlistModel::selectAll()
+{
+  for(int i=0; i<rowCount(); i++)
+    setData(index(i, 0), Qt::Checked, Qt::CheckStateRole);
+}
+
+void MemberlistModel::clearSelection()
+{
+  for(int i=0; i<rowCount(); i++)
+    setData(index(i, 0), Qt::Unchecked, Qt::CheckStateRole);
 }
 
 QBrush MemberlistModel::makeBackground(int row) const
@@ -133,5 +185,4 @@ QBrush MemberlistModel::makeForeground(int row) const
       return QBrush(Qt::black);
   else
       return QBrush(Qt::gray);
-
 }

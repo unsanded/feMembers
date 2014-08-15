@@ -7,6 +7,7 @@
 #include <QSqlTableModel>
 #include <QDateEdit>
 #include <QCheckBox>
+#include <QComboBox>
 
 class MemberDelegate : public QItemDelegate
 {

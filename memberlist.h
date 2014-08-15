@@ -20,6 +20,7 @@ class MemberListWindow : public QMainWindow
 public:
     explicit MemberListWindow(DatabaseConnection& db, QWidget *parent = 0);
     ~MemberListWindow();
+
     
 private slots:
         void on_addButton_pressed();
@@ -31,6 +32,10 @@ private slots:
         void on_saveButtoin_clicked();
 
         void on_actionEmail_triggered();
+
+        void on_actionSelect_All_triggered();
+
+        void on_actionCsv_triggered();
 
 private:
     Ui::MemberList *ui;

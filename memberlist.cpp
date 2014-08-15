@@ -1,3 +1,4 @@
+#include "exportcsvform.h"
 #include "memberlist.h"
 #include "ui_memberlist.h"
 
@@ -9,7 +10,7 @@ MemberListWindow::MemberListWindow(DatabaseConnection& db, QWidget *parent) :
     ui->setupUi(this);
     ui->memberListView->setModel(&model);
     int idindex = model.fieldIndex("id");
-    ui->memberListView->hideColumn(idindex);
+//    ui->memberListView->hideColumn(idindex);
     verifySaveBox.setText("Save changes to database?");
     verifySaveBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
 
@@ -25,8 +26,9 @@ MemberListWindow::MemberListWindow(DatabaseConnection& db, QWidget *parent) :
 
 MemberListWindow::~MemberListWindow()
 {
-    delete ui;
+  delete ui;
 }
+
 
 void MemberListWindow::on_addButton_pressed()
 {
@@ -64,4 +66,20 @@ void MemberListWindow::on_actionEmail_triggered()
 
     QClipboard* cb = QApplication::clipboard();
     cb->setText("haha, im in your clipboard");
+}
+
+void MemberListWindow::on_actionSelect_All_triggered()
+{
+    model.selectAll();
+}
+
+void MemberListWindow::on_actionCsv_triggered()
+{
+    ExportCsvForm form(this);
+    if(form.exec()==QDialog::Accepted){
+        QMimeData* md= new QMimeData;
+        md->set;
+        QClipboard* cb = QApplication::clipboard();
+        cb->setText(model.exportCsv(form.selectedValues()));
+    }
 }

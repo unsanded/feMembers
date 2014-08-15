@@ -6,7 +6,6 @@ DatabaseConnection::DatabaseConnection (QString file, QObject* parent): QObject(
         db.setDatabaseName(file);
         if(db.open()){
                 qDebug() << "opened succesfully :D";
-
         }
         else
         {
