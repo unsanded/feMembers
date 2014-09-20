@@ -27,6 +27,8 @@ private slots:
 
   void on_ExportCsvForm_accepted();
 
+  void on_putRight_clicked();
+
 private:
   Ui::ExportCsvForm *ui;
 };

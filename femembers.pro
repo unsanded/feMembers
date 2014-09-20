@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = femembers
 TEMPLATE = app
 
+CONFIG += c++11
 
 SOURCES += main.cpp\
         memberlist.cpp \
@@ -18,16 +19,21 @@ SOURCES += main.cpp\
     memberlistmodel.cpp \
     qmemberlistview.cpp \
     memberdelegate.cpp \
-    exportcsvform.cpp
+    exportcsvform.cpp \
+    addmemberdialog.cpp \
+    member.cpp
 
 HEADERS  += memberlist.h \
     databaseconnection.h \
     memberlistmodel.h \
     qmemberlistview.h \
     memberdelegate.h \
-    exportcsvform.h
+    exportcsvform.h \
+    addmemberdialog.h \
+    member.h
 
 FORMS    += memberlist.ui \
-    exportcsvform.ui
+    exportcsvform.ui \
+    addmemberdialog.ui
 
 RESOURCES +=

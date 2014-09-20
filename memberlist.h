@@ -6,6 +6,7 @@
 #include <QClipboard>
 #include "memberlistmodel.h"
 #include "databaseconnection.h"
+#include "addmemberdialog.h"
 
 namespace Ui {
 class MemberList;

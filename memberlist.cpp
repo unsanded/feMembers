@@ -32,7 +32,13 @@ MemberListWindow::~MemberListWindow()
 
 void MemberListWindow::on_addButton_pressed()
 {
-    model.insertRow(model.rowCount());
+  AddMemberDialog dialog(this);
+  dialog.exec();
+  if(dialog.result()==QDialog::Accepted)
+    {
+      Member mem(dialog.getMember());
+      model.addMember(mem);
+    }
 }
 
 void MemberListWindow::save()
@@ -65,7 +71,8 @@ void MemberListWindow::on_actionEmail_triggered()
 {
 
     QClipboard* cb = QApplication::clipboard();
-    cb->setText("haha, im in your clipboard");
+    cb->setText(model.exportEmail());
+    ui->statusBar->showMessage("Selected members copied to clipboard. Paste into email...", 120000);
 }
 
 void MemberListWindow::on_actionSelect_All_triggered()
@@ -77,9 +84,9 @@ void MemberListWindow::on_actionCsv_triggered()
 {
     ExportCsvForm form(this);
     if(form.exec()==QDialog::Accepted){
-        QMimeData* md= new QMimeData;
-        md->set;
+
         QClipboard* cb = QApplication::clipboard();
         cb->setText(model.exportCsv(form.selectedValues()));
+        ui->statusBar->showMessage("Selected members copied to clipboard. Paste into excel...", 120);
     }
 }

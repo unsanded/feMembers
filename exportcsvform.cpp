@@ -10,6 +10,21 @@ ExportCsvForm::ExportCsvForm(QWidget *parent) :
   ui->selectedList->addItem("lastName");
   ui->selectedList->addItem("email");
   ui->selectedList->addItem("phone");
+
+  ui->avalableList->addItem("scNumber");
+  ui->avalableList->addItem("studentNumber");
+  ui->avalableList->addItem("bDate");
+  ui->avalableList->addItem("street");
+  ui->avalableList->addItem("houseNumber");
+  ui->avalableList->addItem("postalCode");
+  ui->avalableList->addItem("city");
+  ui->avalableList->addItem("nationality");
+  ui->avalableList->addItem("gender");
+  ui->avalableList->addItem("currentlyMember");
+  ui->avalableList->addItem("dateLeft");
+  ui->avalableList->addItem("dateJoined");
+  ui->avalableList->addItem("initials");
+  ui->avalableList->addItem("comments");
 }
 
 ExportCsvForm::~ExportCsvForm()
@@ -19,7 +34,8 @@ ExportCsvForm::~ExportCsvForm()
 
 void ExportCsvForm::on_putLeft_clicked()
 {
-
+      QListWidgetItem* item= ui->avalableList->takeItem(ui->avalableList->currentRow());
+      ui->selectedList->addItem(item);
 }
 
 void ExportCsvForm::on_ExportCsvForm_accepted()
@@ -30,4 +46,10 @@ void ExportCsvForm::on_ExportCsvForm_accepted()
     {
       m_selectedValues << ui->selectedList->item(i)->text();
     }
+}
+
+void ExportCsvForm::on_putRight_clicked()
+{
+      QListWidgetItem* item= ui->selectedList->takeItem(ui->selectedList->currentRow());
+      ui->avalableList->addItem(item);
 }

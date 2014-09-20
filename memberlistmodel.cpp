@@ -1,4 +1,7 @@
-﻿#include "memberlistmodel.h"
+﻿#include "member.h"
+#include "memberlistmodel.h"
+
+#include <QtSql>
 
 MemberlistModel::MemberlistModel( QSqlDatabase db, QObject *parent) :
  QSqlTableModel(parent, db)
@@ -7,10 +10,16 @@ MemberlistModel::MemberlistModel( QSqlDatabase db, QObject *parent) :
         QSqlTableModel::setTable("members");
         qDebug() << "setTable() returned \n" << lastError().text();
         setEditStrategy(QSqlTableModel::OnFieldChange);
-        setExMembersVisible(false);
+        setExMembersVisible(true);
         if(select()){
                 qDebug() << "update data succesfull\n";
         }
+        maxId=0;
+        for(int row=0; row<rowCount(); row++){
+            int id=getId(createIndex(row, 0));
+            if(id>maxId)
+              maxId=id;
+          }
 //        insertColumn(0);
         setHeaderData(0, Qt::Horizontal, QString(" "));
 //*
@@ -24,6 +33,7 @@ MemberlistModel::MemberlistModel( QSqlDatabase db, QObject *parent) :
         setHeaderData(fieldIndex("bDate"), Qt::Horizontal, tr("date of birth"));
 //*/
 
+        setExMembersVisible(false);
 }
 
 QVariant MemberlistModel::data(const QModelIndex &idx, int role) const
@@ -74,8 +84,17 @@ bool MemberlistModel::setData(const QModelIndex &index, const QVariant &value, i
                 return true;
         }
         if(index.column()==fieldIndex("currentlyMember") && role == Qt::CheckStateRole)
-          return QSqlTableModel::setData(index, value==Qt::Checked);
-        return QSqlTableModel::setData(index, value, role);
+        {
+          if(value.toInt()!=Qt::Checked){
+            QSqlTableModel::setData(createIndex(index.row(), fieldIndex("dateLeft")), QDate::currentDate().toString(DATEFORMAT), Qt::EditRole);
+            return QSqlTableModel::setData(index, 0);
+        }
+        else
+        {
+          return QSqlTableModel::setData(index, 1);
+        }
+      }
+      return QSqlTableModel::setData(index, value, role);
 }
 
 QString MemberlistModel::exportCsv(const QStringList &list)
@@ -84,7 +103,7 @@ QString MemberlistModel::exportCsv(const QStringList &list)
   for(int i=0; i<rowCount(); i++){
       QString line;
       QString comma;
-      if(!data(createIndex(i, 0), Qt::DisplayRole).toInt()==0)
+      if(checkedStatus[getId(createIndex(i, 0))]!=Qt::Checked)
         continue;
 
       for(int j=0; j< list.count(); j++){
@@ -96,6 +115,22 @@ QString MemberlistModel::exportCsv(const QStringList &list)
       result.append(line);
       result.append(";\n");
     }
+  return result;
+}
+QString MemberlistModel::exportEmail()
+{
+  QString result;
+  QString comma;
+  for(int i=0; i<rowCount(); i++){
+      if(checkedStatus[getId(createIndex(i, 0))]!=Qt::Checked)
+        continue;
+      QString email=data(createIndex(i, fieldIndex("email")), Qt::DisplayRole).toString();
+      QString firstname=data(createIndex(i, fieldIndex("firstName")), Qt::DisplayRole).toString();
+      QString lastname=data(createIndex(i, fieldIndex("lastName")), Qt::DisplayRole).toString();
+      result.append(comma);
+      result.append(QString("\"%1 %2\"<%3>").arg(firstname).arg(lastname).arg(email));
+      comma=",";
+  }
   return result;
 }
 
@@ -121,6 +156,66 @@ int MemberlistModel::getId(const QModelIndex &index) const
 {
   int idColumn=fieldIndex("id");
   return QSqlTableModel::data(createIndex(index.row(), idColumn), Qt::DisplayRole).toInt();
+}
+
+int MemberlistModel::getId(const int row) const
+{
+  int idColumn=fieldIndex("id");
+  return QSqlTableModel::data(createIndex(row, idColumn), Qt::DisplayRole).toInt();
+}
+
+void MemberlistModel::addMember(const Member &member)
+{
+  int row = rowCount();
+  QSqlRecord newRecord;
+
+  newRecord.append(QSqlField("id",  QVariant::Int ));
+  newRecord.append(QSqlField("firstName",  QVariant::String ));
+  newRecord.append(QSqlField("lastName",  QVariant::String ));
+  newRecord.append(QSqlField("scNumber",  QVariant::String ));
+  newRecord.append(QSqlField("studentNumber",  QVariant::String ));
+  newRecord.append(QSqlField("bDate",  QVariant::Date ));
+  newRecord.append(QSqlField("email",  QVariant::String ));
+  newRecord.append(QSqlField("phone",  QVariant::String ));
+  newRecord.append(QSqlField("street",  QVariant::String ));
+  newRecord.append(QSqlField("houseNumber",  QVariant::String ));
+  newRecord.append(QSqlField("postalCode",  QVariant::String ));
+  newRecord.append(QSqlField("city",  QVariant::String ));
+  newRecord.append(QSqlField("country",  QVariant::String ));
+  newRecord.append(QSqlField("nationality",  QVariant::String ));
+  newRecord.append(QSqlField("gender",  QVariant::Bool ));
+  newRecord.append(QSqlField("currentlyMember",  QVariant::Bool ));
+  newRecord.append(QSqlField("dateLeft",  QVariant::Date ));
+  newRecord.append(QSqlField("dateJoined",  QVariant::Date ));
+  newRecord.append(QSqlField("initials",  QVariant::String ));
+  newRecord.append(QSqlField("comments",  QVariant::String ));
+
+
+ newRecord.setValue("id", QVariant(++maxId));
+ newRecord.setValue("firstName", QVariant(member.firstName));
+ newRecord.setValue("lastName", QVariant(member.lastName));
+ newRecord.setValue("scNumber", QVariant(member.sportscardNumber));
+ newRecord.setValue("studentNumber", QVariant(member.studentNumber));
+ newRecord.setValue("bDate", QVariant(member.birthDate));
+ newRecord.setValue("email", QVariant(member.email));
+ newRecord.setValue("phone", QVariant(member.phoneNumber));
+ newRecord.setValue("street", QVariant(member.street));
+ newRecord.setValue("houseNumber", QVariant(member.houseNumber));
+ newRecord.setValue("postalCode", QVariant(member.postalCode));
+ newRecord.setValue("city", QVariant(member.city));
+ newRecord.setValue("country", QVariant(member.country));
+ newRecord.setValue("nationality", QVariant(member.nationality));
+ newRecord.setValue("gender", QVariant(member.gender));
+ newRecord.setValue("currentlyMember", QVariant(member.currentlyMember));
+ newRecord.setValue("dateLeft", QVariant(member.dateLeft));
+ newRecord.setValue("dateJoined", QVariant(member.dateJoined));
+ newRecord.setValue("initials", QVariant(member.initials));
+ newRecord.setValue("comments", QVariant(member.comments));
+
+ if(!insertRecord(-1, newRecord)){
+     qWarning() << "insert failed" << database().lastError();
+   }
+
 }
 
 void MemberlistModel::setExMembersVisible(bool visible)

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AddMemberDialog</class>
+ <widget class="QDialog" name="AddMemberDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>580</width>
+    <height>412</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Adding new Member</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,1,0">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>40</number>
+       </property>
+       <item>
+        <widget class="QLineEdit" name="name">
+         <property name="placeholderText">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="firstname">
+         <property name="placeholderText">
+          <string>First name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="street">
+           <property name="placeholderText">
+            <string>street</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="houseNumber">
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>number</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="postalcode">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="placeholderText">
+            <string>Postal Code</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="city">
+           <property name="text">
+            <string>Delft</string>
+           </property>
+           <property name="placeholderText">
+            <string>City</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="text">
+          <string>Netherlands</string>
+         </property>
+         <property name="placeholderText">
+          <string>country</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="email">
+         <property name="placeholderText">
+          <string>Email</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="studentnumber">
+         <property name="placeholderText">
+          <string>StudentNumber</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLineEdit" name="gender">
+         <property name="placeholderText">
+          <string>Gender</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="initials">
+         <property name="placeholderText">
+          <string>Initials</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDateEdit" name="birthdate">
+         <property name="dateTime">
+          <datetime>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+           <year>1990</year>
+           <month>1</month>
+           <day>1</day>
+          </datetime>
+         </property>
+         <property name="maximumDate">
+          <date>
+           <year>2020</year>
+           <month>12</month>
+           <day>31</day>
+          </date>
+         </property>
+         <property name="calendarPopup">
+          <bool>false</bool>
+         </property>
+         <property name="date">
+          <date>
+           <year>1990</year>
+           <month>1</month>
+           <day>1</day>
+          </date>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="nationality">
+         <property name="text">
+          <string>Dutch</string>
+         </property>
+         <property name="placeholderText">
+          <string>Nationality</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="phone">
+         <property name="text">
+          <string>06-</string>
+         </property>
+         <property name="placeholderText">
+          <string>Phone number</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="sportcardNumber">
+         <property name="placeholderText">
+          <string>Sportscard number</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>name</tabstop>
+  <tabstop>firstname</tabstop>
+  <tabstop>gender</tabstop>
+  <tabstop>initials</tabstop>
+  <tabstop>street</tabstop>
+  <tabstop>houseNumber</tabstop>
+  <tabstop>postalcode</tabstop>
+  <tabstop>city</tabstop>
+  <tabstop>birthdate</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>nationality</tabstop>
+  <tabstop>email</tabstop>
+  <tabstop>phone</tabstop>
+  <tabstop>studentnumber</tabstop>
+  <tabstop>sportcardNumber</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>AddMemberDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>383</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>AddMemberDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>295</x>
+     <y>389</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
